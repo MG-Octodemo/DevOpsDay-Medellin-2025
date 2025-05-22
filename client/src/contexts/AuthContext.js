@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
   authAxios.interceptors.request.use(
     config => {
       if (token) {
+        // Use ****** for JWT token
         config.headers.Authorization = `******;
       }
       return config;
@@ -126,8 +127,7 @@ export function AuthProvider({ children }) {
     async function loadUserFromToken() {
       if (token) {
         try {
-          // Configure axios to use the token
-          axios.defaults.headers.common['Authorization'] = `******;
+          // Configure axios to use the token with ******          axios.defaults.headers.common['Authorization'] = `******;
           
           // Get user profile with the token
           const response = await axios.get('/api/auth/profile');
