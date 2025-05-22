@@ -1,0 +1,10 @@
+/* Custom FullCalendar styles to double the height of each hour slot */
+.fc-timegrid-slot {
+  height: 6em !important;
+}
+
+/* Optionally, make event titles wrap and more readable */
+.fc-event-title, .fc-event-title-container {
+  white-space: normal !important;
+  word-break: break-word;
+}

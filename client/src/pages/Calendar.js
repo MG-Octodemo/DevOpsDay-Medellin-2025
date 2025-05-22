@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
+import '../fullcalendar-overrides.css';
 
 function Calendar() {
   const [talks, setTalks] = useState([]);

@@ -15,7 +15,8 @@ class UserStore {
 
   // Create a new user
   async create(userData) {
-    const id = this.generateId();
+    // Use provided id (e.g., from Firebase) if present, otherwise generate
+    const id = userData.id || this.generateId();
     const timestamp = new Date();
     
     // Hash password if it exists

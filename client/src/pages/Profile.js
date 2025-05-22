@@ -21,13 +21,11 @@ function Profile() {
       // Fetch user profile details from backend
       const fetchUserProfile = async () => {
         try {
-          const token = await currentUser.getIdToken();
-          const authHeader = 'Bearer ' + token;
-          
+          const authHeader = currentUser.token ? 'Bearer ' + currentUser.token : undefined;
+          if (!authHeader) throw new Error('No authentication token found. Please sign in again.');
           const profileResponse = await axios.get('/api/auth/profile', {
             headers: { Authorization: authHeader }
           });
-          
           const userData = profileResponse.data;
           setCompany(userData.company || '');
           setJobTitle(userData.jobTitle || '');
@@ -35,17 +33,14 @@ function Profile() {
           console.error('Error fetching user profile:', error);
         }
       };
-      
       // Fetch user registrations
       const fetchRegistrations = async () => {
         try {
-          const token = await currentUser.getIdToken();
-          const authHeader = 'Bearer ' + token;
-          
+          const authHeader = currentUser.token ? 'Bearer ' + currentUser.token : undefined;
+          if (!authHeader) throw new Error('No authentication token found. Please sign in again.');
           const registrationsResponse = await axios.get('/api/registration/user', {
             headers: { Authorization: authHeader }
           });
-          
           setRegistrations(registrationsResponse.data);
         } catch (error) {
           console.error('Error fetching registrations:', error);
@@ -196,7 +191,7 @@ function Profile() {
           <button
             type="submit"
             disabled={updating}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 text-black px-6 py-2 rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {updating ? 'Updating...' : 'Update Profile'}
           </button>
@@ -236,7 +231,7 @@ function Profile() {
                 
                 <button 
                   onClick={() => handleCancelRegistration(registration._id, registration.talk._id)}
-                  className="text-sm text-red-600 hover:text-red-800"
+                  className="text-sm px-4 py-2 rounded-lg bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 text-black font-semibold shadow-md hover:from-red-600 hover:to-yellow-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 transition-all duration-200 ease-in-out"
                 >
                   Cancel Registration
                 </button>

@@ -32,26 +32,25 @@ exports.verifyToken = (token) => {
 exports.authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ message: 'Authorization token is required' });
     }
-    
     const token = authHeader.split(' ')[1];
     const decoded = this.verifyToken(token);
-    
     if (!decoded) {
       return res.status(401).json({ message: 'Invalid or expired token' });
     }
-    
     // Find user in our store
-    const user = usersStore.findById(decoded.id);
-    
+    let user = usersStore.findById(decoded.id);
     if (!user) {
-      return res.status(401).json({ message: 'User not found' });
+      // Auto-create user if not found (for 3rd-party JWTs)
+      user = await usersStore.create({
+        id: decoded.id,
+        email: decoded.email,
+        displayName: decoded.displayName || decoded.name || '',
+        role: decoded.role || 'user'
+      });
     }
-    
-    // Attach user to request
     req.user = user;
     next();
   } catch (error) {

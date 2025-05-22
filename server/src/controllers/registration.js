@@ -4,11 +4,25 @@ const usersStore = require('../store/users');
 const emailService = require('../services/email');
 
 // Register user for a talk
-exports.registerForTalk = (req, res) => {
+exports.registerForTalk = async (req, res) => {
   try {
     const { talkId } = req.params;
     const userId = req.user.id;
-    
+    const usersStore = require('../store/users');
+
+    // Auto-create user in usersStore if not found
+    let user = usersStore.findById(userId);
+    if (!user) {
+      // Use info from req.user (populated by auth middleware)
+      user = await usersStore.create({
+        id: userId,
+        displayName: req.user.displayName || req.user.name || 'Anonymous',
+        email: req.user.email || '',
+        company: req.user.company || '',
+        jobTitle: req.user.jobTitle || ''
+      });
+    }
+
     // Check if talk exists
     const talk = talksStore.findById(talkId);
     if (!talk) {
@@ -32,7 +46,7 @@ exports.registerForTalk = (req, res) => {
       });
       
       // Get user for confirmation
-      const user = usersStore.findById(userId);
+      // (already set above)
       
       // Send confirmation email
       // Note: You may want to comment this out if email service is not configured

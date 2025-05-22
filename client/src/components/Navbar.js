@@ -36,7 +36,7 @@ function Navbar() {
               </Link>
               <button 
                 onClick={handleLogout}
-                className="text-gray-300 hover:text-white cursor-pointer"
+                className="text-gray-300 hover:text-white cursor-pointer text-black"
               >
                 Logout
               </button>

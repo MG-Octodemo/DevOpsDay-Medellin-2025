@@ -33,7 +33,11 @@ class TalkStore {
 
   // Find all talks
   findAll() {
-    return Array.from(this.talks.values());
+    // Map 'id' to '_id' for frontend compatibility
+    return Array.from(this.talks.values()).map(talk => ({
+      ...talk,
+      _id: talk.id
+    }));
   }
 
   // Update a talk
@@ -83,187 +87,435 @@ class TalkStore {
   populateWithMockData() {
     const mockTalks = [
       {
-        title: 'Opening Keynote: DevOps Evolution in 2025',
-        description: 'A comprehensive overview of how DevOps practices have evolved and what to expect in the near future.',
-        speakers: [
-          {
-            name: 'Maria Rodriguez',
-            bio: 'DevOps thought leader and CTO of CloudNative Solutions',
-            photo: 'https://example.com/maria.jpg'
-          }
-        ],
-        startTime: new Date('2025-07-15T09:00:00'),
-        endTime: new Date('2025-07-15T10:00:00'),
-        location: 'Main Hall',
-        maxAttendees: 250,
-        tags: ['DevOps', 'Future Trends', 'Keynote']
-      },
-      {
-        title: 'GitOps in Practice: Advanced Automation Techniques',
-        description: 'Learn how leading organizations are implementing GitOps to manage their infrastructure and deployments.',
-        speakers: [
-          {
-            name: 'Carlos Gomez',
-            bio: 'Lead DevOps Engineer at TechInnovate',
-            photo: 'https://example.com/carlos.jpg'
-          }
-        ],
-        startTime: new Date('2025-07-15T10:30:00'),
-        endTime: new Date('2025-07-15T11:30:00'),
-        location: 'Workshop Room A',
-        maxAttendees: 100,
-        tags: ['GitOps', 'Automation', 'CI/CD']
-      },
-      {
-        title: 'Kubernetes Security Best Practices for 2025',
-        description: 'A deep dive into securing your Kubernetes clusters against the latest threats.',
-        speakers: [
-          {
-            name: 'Laura Vega',
-            bio: 'Security Specialist and Kubernetes Certified Administrator',
-            photo: 'https://example.com/laura.jpg'
-          }
-        ],
-        startTime: new Date('2025-07-15T10:30:00'),
-        endTime: new Date('2025-07-15T11:30:00'),
-        location: 'Workshop Room B',
-        maxAttendees: 100,
-        tags: ['Kubernetes', 'Security', 'Best Practices']
-      },
-      {
-        title: 'AI-Powered DevOps: From Myth to Reality',
-        description: 'Explore real-world implementations of AI in DevOps workflows and how they're changing the landscape.',
-        speakers: [
-          {
-            name: 'Alejandro Restrepo',
-            bio: 'AI Engineer and DevOps Consultant',
-            photo: 'https://example.com/alejandro.jpg'
-          }
-        ],
-        startTime: new Date('2025-07-15T12:00:00'),
-        endTime: new Date('2025-07-15T13:00:00'),
-        location: 'Main Hall',
-        maxAttendees: 200,
-        tags: ['AI', 'Machine Learning', 'DevOps']
-      },
-      {
-        title: 'Lunch Break & Networking',
-        description: 'Enjoy lunch and connect with other attendees.',
+        title: 'Apertura y Bienvenida',
+        description: 'Comité Organizador DevOpsDay Medellín',
         speakers: [],
-        startTime: new Date('2025-07-15T13:00:00'),
-        endTime: new Date('2025-07-15T14:00:00'),
-        location: 'Dining Area',
-        maxAttendees: 300,
-        tags: ['Networking', 'Break']
+        startTime: new Date('2025-05-22T09:00:00'),
+        endTime: new Date('2025-05-22T09:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Apertura']
       },
       {
-        title: 'Serverless DevOps: Beyond the Hype',
-        description: 'Practical insights on implementing DevOps practices in serverless architectures.',
+        title: 'The Power of AI in Cloud Reliability Engineering (CRE)',
+        description: 'Carlos Rojas, Autor del libro: Reliability Engineering in the Cloud: Strategies and Practices for AI-powered Cloud-based Systems',
         speakers: [
-          {
-            name: 'Isabella Martinez',
-            bio: 'Serverless Advocate and Solutions Architect',
-            photo: 'https://example.com/isabella.jpg'
-          }
+          { name: 'Carlos Rojas', bio: 'Autor y Experto en CRE', photo: '' }
         ],
-        startTime: new Date('2025-07-15T14:00:00'),
-        endTime: new Date('2025-07-15T15:00:00'),
-        location: 'Workshop Room A',
-        maxAttendees: 120,
-        tags: ['Serverless', 'FaaS', 'Cloud Native']
+        startTime: new Date('2025-05-22T09:25:00'),
+        endTime: new Date('2025-05-22T09:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Keynote', 'AI', 'Cloud', 'Reliability']
       },
       {
-        title: 'DevSecOps: Integrating Security Throughout the Pipeline',
-        description: 'How to build security into every step of your development pipeline without sacrificing speed.',
+        title: '30 Years of MySQL: The Present and the Future',
+        description: 'Juliano Faloco - Director MySQL Heatwave-Oracle',
         speakers: [
-          {
-            name: 'Manuel Torres',
-            bio: 'Chief Security Officer at SecDevOps Inc.',
-            photo: 'https://example.com/manuel.jpg'
-          }
+          { name: 'Juliano Faloco', bio: 'Director MySQL Heatwave-Oracle', photo: '' }
         ],
-        startTime: new Date('2025-07-15T14:00:00'),
-        endTime: new Date('2025-07-15T15:00:00'),
-        location: 'Workshop Room B',
-        maxAttendees: 120,
-        tags: ['DevSecOps', 'Security', 'Compliance']
+        startTime: new Date('2025-05-22T10:00:00'),
+        endTime: new Date('2025-05-22T10:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['MySQL', 'Database']
       },
       {
-        title: 'Observability in Distributed Systems',
-        description: 'Modern approaches to gaining visibility into complex, distributed applications.',
+        title: 'GENAI EN SEGURIDAD: ¿Cómo podemos usar la IA para optimizar los procesos sin poner en riesgo la seguridad?',
+        description: 'Juan Carlos Restrepo - Fluid Attacks',
         speakers: [
-          {
-            name: 'Sofia Herrera',
-            bio: 'SRE Lead at MegaCloud',
-            photo: 'https://example.com/sofia.jpg'
-          }
+          { name: 'Juan Carlos Restrepo', bio: 'Fluid Attacks', photo: '' }
         ],
-        startTime: new Date('2025-07-15T15:30:00'),
-        endTime: new Date('2025-07-15T16:30:00'),
-        location: 'Main Hall',
-        maxAttendees: 180,
-        tags: ['Observability', 'Monitoring', 'SRE']
+        startTime: new Date('2025-05-22T11:00:00'),
+        endTime: new Date('2025-05-22T11:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['AI', 'Security']
       },
       {
-        title: 'Workshop: Chaos Engineering for Resilient Systems',
-        description: 'Hands-on workshop on implementing chaos engineering principles to build more resilient systems.',
+        title: 'The Kubernetes Jedi: Mastering the Force of Scalable Leadership',
+        description: 'Lukasz Niedzwiedzki (Polonia), Cesar Martinez (Mexico), Fabian Novoa (Colombia)',
         speakers: [
-          {
-            name: 'Diego Moreno',
-            bio: 'Chaos Engineering Expert and System Architect',
-            photo: 'https://example.com/diego.jpg'
-          }
+          { name: 'Lukasz Niedzwiedzki', bio: 'E. & LATAM Cloud & DevOps Practice Director', photo: '' },
+          { name: 'Cesar Martinez', bio: 'LATAM Cloud & DevOps Practice Lead', photo: '' },
+          { name: 'Fabian Novoa', bio: 'Colombia: Gloablm Cloud & DevOps Cluster Lead - softserve', photo: '' }
         ],
-        startTime: new Date('2025-07-15T15:30:00'),
-        endTime: new Date('2025-07-15T17:00:00'),
-        location: 'Workshop Room A',
-        maxAttendees: 50,
-        tags: ['Chaos Engineering', 'Resilience', 'Workshop']
+        startTime: new Date('2025-05-22T11:30:00'),
+        endTime: new Date('2025-05-22T11:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Kubernetes', 'Leadership']
       },
       {
-        title: 'The Future of DevOps: Panel Discussion',
-        description: 'Industry leaders discuss where DevOps is headed and what skills will be most valuable.',
+        title: 'La Revolución de Agentes Llega a GitHub Copilot',
+        description: 'Mabel Gerónimo - GitHub',
         speakers: [
-          {
-            name: 'Maria Rodriguez',
-            bio: 'DevOps thought leader and CTO of CloudNative Solutions',
-            photo: 'https://example.com/maria.jpg'
-          },
-          {
-            name: 'Carlos Gomez',
-            bio: 'Lead DevOps Engineer at TechInnovate',
-            photo: 'https://example.com/carlos.jpg'
-          },
-          {
-            name: 'Sofia Herrera',
-            bio: 'SRE Lead at MegaCloud',
-            photo: 'https://example.com/sofia.jpg'
-          }
+          { name: 'Mabel Gerónimo', bio: 'GitHub', photo: '' }
         ],
-        startTime: new Date('2025-07-15T17:30:00'),
-        endTime: new Date('2025-07-15T18:30:00'),
-        location: 'Main Hall',
-        maxAttendees: 250,
-        tags: ['Panel', 'Future Trends', 'Career Development']
+        startTime: new Date('2025-05-22T14:30:00'),
+        endTime: new Date('2025-05-22T14:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['GitHub', 'AI', 'Copilot']
       },
       {
-        title: 'Closing Remarks & Networking Reception',
-        description: 'Wrap-up of the day's events and networking with drinks and appetizers.',
+        title: 'Dominando a Hydra: Encontrando Fluidez en las Batallas Interminables de Kubernetes',
+        description: 'Johny Jiménez - Sonda',
         speakers: [
-          {
-            name: 'Event Organizers',
-            bio: 'DevOpsDay Medellin 2025 Committee',
-            photo: 'https://example.com/organizers.jpg'
-          }
+          { name: 'Johny Jiménez', bio: 'Sonda', photo: '' }
         ],
-        startTime: new Date('2025-07-15T18:30:00'),
-        endTime: new Date('2025-07-15T20:00:00'),
-        location: 'Reception Hall',
-        maxAttendees: 300,
-        tags: ['Networking', 'Social', 'Closing']
+        startTime: new Date('2025-05-22T15:00:00'),
+        endTime: new Date('2025-05-22T15:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Kubernetes']
+      },
+      {
+        title: 'El Camino Hacia DevSecOps Capítulo II: Gobernanza',
+        description: 'Alejandro Enciso - Lugapel Cybersecurity Advisory',
+        speakers: [
+          { name: 'Alejandro Enciso', bio: 'Lugapel Cybersecurity Advisory', photo: '' }
+        ],
+        startTime: new Date('2025-05-22T15:30:00'),
+        endTime: new Date('2025-05-22T15:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['DevSecOps', 'Governance']
+      },
+      {
+        title: 'IA: ¿Dentro o fuera de la Matrix? Descubre los peligros y las defensas!',
+        description: 'Ivan Dario Sanchez - NTT Data',
+        speakers: [
+          { name: 'Ivan Dario Sanchez', bio: 'NTT Data', photo: '' }
+        ],
+        startTime: new Date('2025-05-22T16:00:00'),
+        endTime: new Date('2025-05-22T16:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['AI', 'Security']
+      },
+      {
+        title: 'DevSecOps en Acción: Del Concepto a la Práctica',
+        description: 'Celia Altamirano - Ingeniera DevOps',
+        speakers: [
+          { name: 'Celia Altamirano', bio: 'Ingeniera DevOps', photo: '' }
+        ],
+        startTime: new Date('2025-05-22T16:30:00'),
+        endTime: new Date('2025-05-22T16:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['DevSecOps']
+      },
+      {
+        title: 'Navegando la Complejidad: Observabilidad e Ingeniería del Caos en Sistemas Distribuidos',
+        description: 'Mateo Zapata - EPAM',
+        speakers: [
+          { name: 'Mateo Zapata', bio: 'EPAM', photo: '' }
+        ],
+        startTime: new Date('2025-05-22T17:00:00'),
+        endTime: new Date('2025-05-22T17:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Observability', 'Chaos Engineering']
+      },
+      {
+        title: 'Keynote de Cierre',
+        description: 'Juan A. Garcia - Managing Director at Accenture',
+        speakers: [
+          { name: 'Juan A. Garcia', bio: 'Managing Director at Accenture', photo: '' }
+        ],
+        startTime: new Date('2025-05-22T17:30:00'),
+        endTime: new Date('2025-05-22T17:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Keynote', 'Accenture']
+      },
+      {
+        title: 'Cierre del Evento - Comité Organizador',
+        description: '',
+        speakers: [],
+        startTime: new Date('2025-05-22T18:00:00'),
+        endTime: new Date('2025-05-22T18:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Cierre']
+      },
+      // --- Talks for May 23, 2025 ---
+      {
+        title: 'Apertura y Bienvenida',
+        description: 'Comité Organizador DevOpsDay Medellín',
+        speakers: [],
+        startTime: new Date('2025-05-23T09:00:00'),
+        endTime: new Date('2025-05-23T09:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Apertura']
+      },
+      {
+        title: 'Explotando el Potencial de las GPUs: Arquitectura, Paralelismo y Rendimiento',
+        description: 'Valentina Ferruere - ORACLE',
+        speakers: [
+          { name: 'Valentina Ferruere', bio: 'Artificial Intelligence Engineer, ORACLE', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T09:25:00'),
+        endTime: new Date('2025-05-23T09:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['GPU', 'AI', 'Oracle']
+      },
+      {
+        title: 'Power Skills: El Super Poder del Nuevo Talento',
+        description: 'Heimar Vega - Head of global delivery network devops at NTT DATA',
+        speakers: [
+          { name: 'Heimar Vega', bio: 'Head of global delivery network devops at NTT DATA', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T10:00:00'),
+        endTime: new Date('2025-05-23T10:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Skills', 'Talent']
+      },
+      {
+        title: 'Desarrollo de Aplicaciones Hecho Magia',
+        description: 'Jennifer Pérez - CTO y Cofundadora Devco',
+        speakers: [
+          { name: 'Jennifer Pérez', bio: 'CTO y Cofundadora Devco', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T11:00:00'),
+        endTime: new Date('2025-05-23T11:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Desarrollo', 'Aplicaciones']
+      },
+      {
+        title: 'ASPM: Más Allá de las Vulnerabilidades',
+        description: 'Ronen Riesenfeld - Solutions engineer at CHECKMARX',
+        speakers: [
+          { name: 'Ronen Riesenfeld', bio: 'Solutions engineer at CHECKMARX', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T11:30:00'),
+        endTime: new Date('2025-05-23T11:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['ASPM', 'Vulnerabilidades', 'Checkmarx']
+      },
+      // --- Parallel Tracks (14:30-15:55, 16:00-16:55) ---
+      // Add a few representative parallel talks for brevity
+      {
+        title: 'Stop the Networking Chaos, Secure & Optimize AWS Networking with Centralized Architecture',
+        description: 'AWS devops technical leader',
+        speakers: [
+          { name: 'AWS devops technical leader', bio: '', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T14:30:00'),
+        endTime: new Date('2025-05-23T14:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['AWS', 'Networking']
+      },
+      {
+        title: 'DevOps y Observabilidad en los Tiempos de la IA',
+        description: 'Stevenson Ramírez - DYNATRACE',
+        speakers: [
+          { name: 'Stevenson Ramírez', bio: 'DYNATRACE', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T15:00:00'),
+        endTime: new Date('2025-05-23T15:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['DevOps', 'Observabilidad', 'IA']
+      },
+      {
+        title: 'Mis Aplicaciones Hablan: Fortalece DevOps con Observabilidad Inteligente',
+        description: 'Guillermo Penagos - ELASTIC',
+        speakers: [
+          { name: 'Guillermo Penagos', bio: 'ELASTIC', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T15:30:00'),
+        endTime: new Date('2025-05-23T15:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['DevOps', 'Observabilidad', 'Elastic']
+      },
+      {
+        title: 'Agilidad más allá del Framework: Liderazgo y Cultura en la Transformación Digital',
+        description: 'Carlos Tangua - NTT DATA',
+        speakers: [
+          { name: 'Carlos Tangua', bio: 'NTT DATA', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T16:00:00'),
+        endTime: new Date('2025-05-23T16:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Agilidad', 'Transformación Digital']
+      },
+      {
+        title: 'Revolución Agentic AI',
+        description: 'Andres Perez, Felipe Mejía - MICROSOFT',
+        speakers: [
+          { name: 'Andres Perez', bio: 'MICROSOFT', photo: '' },
+          { name: 'Felipe Mejía', bio: 'MICROSOFT', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T16:30:00'),
+        endTime: new Date('2025-05-23T16:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['AI', 'Microsoft', 'Agentic']
+      },
+      {
+        title: 'Redefining Hyper-Efficiency in the Digital Age',
+        description: 'Felipe Ospina - CI&T',
+        speakers: [
+          { name: 'Felipe Ospina', bio: 'CI&T', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T17:00:00'),
+        endTime: new Date('2025-05-23T17:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Efficiency', 'Digital Age']
+      },
+      {
+        title: 'Keynote de Cierre',
+        description: 'Andres Barrantes - CEO & Cofounder at NUUVU',
+        speakers: [
+          { name: 'Andres Barrantes', bio: 'CEO & Cofounder at NUUVU', photo: '' }
+        ],
+        startTime: new Date('2025-05-23T17:30:00'),
+        endTime: new Date('2025-05-23T17:55:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Keynote', 'NUUVU']
+      },
+      {
+        title: 'Cierre del Evento - Comité Organizador',
+        description: '',
+        speakers: [],
+        startTime: new Date('2025-05-23T18:00:00'),
+        endTime: new Date('2025-05-23T18:25:00'),
+        location: 'Teatro Mayor San José',
+        maxAttendees: null,
+        tags: ['Cierre']
+      },
+      // --- Talks for May 24, 2025 ---
+      {
+        title: 'Apertura y Bienvenida U de A',
+        description: 'Comité Organizador DevOpsDay Medellín',
+        speakers: [],
+        startTime: new Date('2025-05-24T09:00:00'),
+        endTime: new Date('2025-05-24T09:25:00'),
+        location: 'Teatro Universitario',
+        maxAttendees: null,
+        tags: ['Apertura']
+      },
+      {
+        title: 'Exploring the Convergence of Machine Learning, AI, DevOps, and Cloud-Native Technologies in Automation',
+        description: 'Ben N Savage - CEO & Founder VERITAS AUTOMATA',
+        speakers: [
+          { name: 'Ben N Savage', bio: 'CEO & Founder VERITAS AUTOMATA', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T09:25:00'),
+        endTime: new Date('2025-05-24T09:55:00'),
+        location: 'Teatro Universitario',
+        maxAttendees: null,
+        tags: ['AI', 'DevOps', 'Cloud-Native', 'Automation']
+      },
+      {
+        title: 'Security/Chaos: Infrastructure Has Fallen',
+        description: 'Axel Laburna - DevOps Lead & DevOps Institute Ambassador',
+        speakers: [
+          { name: 'Axel Laburna', bio: 'DevOps Lead & DevOps Institute Ambassador', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T10:00:00'),
+        endTime: new Date('2025-05-24T10:25:00'),
+        location: 'Teatro Universitario',
+        maxAttendees: null,
+        tags: ['Security', 'Chaos Engineering']
+      },
+      // Add a few representative parallel talks for May 24 (10:30-16:55)
+      {
+        title: 'BIZOPS',
+        description: 'Ivan Dario Sanchez - NTT DATA',
+        speakers: [
+          { name: 'Ivan Dario Sanchez', bio: 'NTT DATA', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T10:30:00'),
+        endTime: new Date('2025-05-24T10:55:00'),
+        location: 'Auditorio Ingeniería',
+        maxAttendees: null,
+        tags: ['BizOps']
+      },
+      {
+        title: 'Platform Engineer to Maximize Developer Skills',
+        description: 'Juan Ricardo Gonzalez - STRP Architect REDHAT',
+        speakers: [
+          { name: 'Juan Ricardo Gonzalez', bio: 'STRP Architect REDHAT', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T11:00:00'),
+        endTime: new Date('2025-05-24T11:25:00'),
+        location: 'Auditorio Principal',
+        maxAttendees: null,
+        tags: ['Platform Engineering', 'Developer Skills']
+      },
+      {
+        title: 'Continuous Testing in the Cloud-Native World',
+        description: 'Caio Medeiros - Senior Devops Architect TESTKUBE',
+        speakers: [
+          { name: 'Caio Medeiros', bio: 'Senior Devops Architect TESTKUBE', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T11:00:00'),
+        endTime: new Date('2025-05-24T11:25:00'),
+        location: 'Sala 1 - Piso 2',
+        maxAttendees: null,
+        tags: ['Testing', 'Cloud-Native']
+      },
+      {
+        title: 'Desarrollo Seguro con Checkmarx',
+        description: 'Alejandro Enciso - Cybersecurity Advisory, Jorge Romero - CHECKMARX',
+        speakers: [
+          { name: 'Alejandro Enciso', bio: 'Cybersecurity Advisory', photo: '' },
+          { name: 'Jorge Romero', bio: 'CHECKMARX', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T11:30:00'),
+        endTime: new Date('2025-05-24T11:55:00'),
+        location: 'Sala 2 - Piso 2',
+        maxAttendees: null,
+        tags: ['Security', 'Checkmarx']
+      },
+      {
+        title: 'DevOps Essentials Lab for Scrum Masters and PO',
+        description: 'Christian Gomez - BBVA',
+        speakers: [
+          { name: 'Christian Gomez', bio: 'BBVA', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T11:00:00'),
+        endTime: new Date('2025-05-24T11:25:00'),
+        location: 'Auditorio Ingeniería',
+        maxAttendees: null,
+        tags: ['DevOps', 'Scrum', 'PO']
+      },
+      {
+        title: 'FINOPS',
+        description: 'Cristian Soto - Rockwell Automation',
+        speakers: [
+          { name: 'Cristian Soto', bio: 'Rockwell Automation', photo: '' }
+        ],
+        startTime: new Date('2025-05-24T16:00:00'),
+        endTime: new Date('2025-05-24T16:25:00'),
+        location: 'Auditorio Ingeniería',
+        maxAttendees: null,
+        tags: ['FinOps']
+      },
+      {
+        title: 'Cierre del Evento - Comité Organizador',
+        description: '',
+        speakers: [],
+        startTime: new Date('2025-05-24T17:00:00'),
+        endTime: new Date('2025-05-24T17:25:00'),
+        location: 'Teatro Universitario',
+        maxAttendees: null,
+        tags: ['Cierre']
       }
     ];
-
     mockTalks.forEach(talk => this.create(talk));
   }
 }

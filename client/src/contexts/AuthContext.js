@@ -43,11 +43,12 @@ export function AuthProvider({ children }) {
       });
       
       const { user, token } = response.data;
-      setCurrentUser(user);
+      // Attach token to user object for downstream use
+      setCurrentUser({ ...user, token });
       setToken(token);
       localStorage.setItem('authToken', token);
       
-      return user;
+      return { ...user, token };
     } catch (error) {
       setError(error.response?.data?.message || error.message);
       throw error;
@@ -65,11 +66,12 @@ export function AuthProvider({ children }) {
       });
       
       const { user, token } = response.data;
-      setCurrentUser(user);
+      // Attach token to user object for downstream use
+      setCurrentUser({ ...user, token });
       setToken(token);
       localStorage.setItem('authToken', token);
       
-      return user;
+      return { ...user, token };
     } catch (error) {
       setError(error.response?.data?.message || error.message);
       throw error;
@@ -132,7 +134,7 @@ export function AuthProvider({ children }) {
           
           // Get user profile with the token
           const response = await axios.get('/api/auth/profile');
-          setCurrentUser(response.data);
+          setCurrentUser({ ...response.data, token });
         } catch (error) {
           console.error('Failed to load user from token:', error);
           // If token is invalid or expired, clear it

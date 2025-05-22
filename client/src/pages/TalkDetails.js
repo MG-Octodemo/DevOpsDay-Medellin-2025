@@ -23,10 +23,9 @@ function TalkDetails() {
         setTalk(response.data);
         
         // Check if user is registered for this talk
-        if (currentUser) {
+        if (currentUser && currentUser.token) {
           try {
-            const token = await currentUser.getIdToken();
-            const authHeader = 'Bearer ' + token;
+            const authHeader = 'Bearer ' + currentUser.token;
             
             const registrationsResponse = await axios.get('/api/registration/user', {
               headers: { Authorization: authHeader }
@@ -62,34 +61,40 @@ function TalkDetails() {
       setRegistering(true);
       setError('');
       setSuccess('');
-      
-      const token = await currentUser.getIdToken();
-      const authHeader = 'Bearer ' + token;
-      
-      await axios.post(`/api/registration/${id}`, {}, {
+
+      const authHeader = currentUser.token ? 'Bearer ' + currentUser.token : undefined;
+      if (!authHeader) throw new Error('No authentication token found. Please sign in again.');
+
+      const response = await axios.post(`/api/registration/${id}`, {}, {
         headers: { Authorization: authHeader }
       });
-      
+
       setIsRegistered(true);
-      setSuccess('You have successfully registered for this talk!');
+      setSuccess(response.data?.message || 'You have successfully registered for this talk!');
     } catch (error) {
       console.error('Error registering for talk:', error);
-      setError(error.response?.data?.message || 'Failed to register. Please try again.');
+      // Show more detailed error if available
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else {
+        setError('Failed to register. Please try again.');
+      }
     } finally {
       setRegistering(false);
     }
   };
 
   const handleCancelRegistration = async () => {
-    if (!currentUser) return;
+    if (!currentUser || !currentUser.token) return;
     
     try {
       setRegistering(true);
       setError('');
       setSuccess('');
       
-      const token = await currentUser.getIdToken();
-      const authHeader = 'Bearer ' + token;
+      const authHeader = 'Bearer ' + currentUser.token;
       
       await axios.delete(`/api/registration/${id}`, {
         headers: { Authorization: authHeader }
@@ -116,7 +121,7 @@ function TalkDetails() {
         <p className="mt-4">The talk you're looking for doesn't exist or has been removed.</p>
         <button 
           onClick={() => navigate('/calendar')}
-          className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+          className="mt-4 bg-blue-600 text-black px-4 py-2 rounded"
         >
           Return to Calendar
         </button>
@@ -201,7 +206,7 @@ function TalkDetails() {
             <button
               onClick={handleCancelRegistration}
               disabled={registering}
-              className="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 disabled:opacity-50"
+              className="bg-red-600 text-black px-6 py-2 rounded-md hover:bg-red-700 disabled:opacity-50"
             >
               {registering ? 'Processing...' : 'Cancel Registration'}
             </button>
@@ -209,7 +214,7 @@ function TalkDetails() {
             <button
               onClick={handleRegister}
               disabled={registering}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
+              className="bg-blue-600 text-black px-6 py-2 rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
               {registering ? 'Processing...' : 'Register for this Talk'}
             </button>
