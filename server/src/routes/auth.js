@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/auth');
+const { authenticate } = require('../utils/jwtAuth');
 
-// Firebase will handle most auth flows directly on the client
-// These endpoints are for server-side operations and validation
+// Public routes
+router.post('/register', authController.register);
+router.post('/login', authController.login);
 
-// Verify token
-router.post('/verify-token', authController.verifyToken);
-
-// Get user profile
-router.get('/profile', authController.getProfile);
-
-// Update user profile
-router.put('/profile', authController.updateProfile);
+// Protected routes
+router.get('/profile', authenticate, authController.getProfile);
+router.put('/profile', authenticate, authController.updateProfile);
 
 module.exports = router;

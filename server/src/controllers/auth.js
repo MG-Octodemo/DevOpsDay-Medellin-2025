@@ -1,58 +1,75 @@
-const admin = require('firebase-admin');
-const User = require('../models/user');
+const usersStore = require('../store/users');
+const { generateToken } = require('../utils/jwtAuth');
 
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL
-    })
-  });
-}
-
-// Verify Firebase token
-exports.verifyToken = async (req, res) => {
+// Register a new user
+exports.register = async (req, res) => {
   try {
-    const { token } = req.body;
-    if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
+    const { email, password, displayName } = req.body;
+    
+    // Check if user already exists
+    const existingUser = usersStore.findByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists with this email' });
     }
-
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    const userId = decodedToken.uid;
-
-    // Check if user exists in our database
-    let user = await User.findOne({ firebaseUid: userId });
-    if (!user) {
-      // Create user in our database if not exists
-      user = new User({
-        firebaseUid: userId,
-        email: decodedToken.email,
-        displayName: decodedToken.name || '',
-      });
-      await user.save();
-    }
-
-    res.status(200).json({ message: 'Token verified', user });
+    
+    // Create new user
+    const newUser = await usersStore.create({
+      email,
+      password,
+      displayName: displayName || '',
+    });
+    
+    // Generate JWT token
+    const token = generateToken(newUser);
+    
+    res.status(201).json({ 
+      message: 'User registered successfully',
+      user: newUser,
+      token 
+    });
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token', error: error.message });
+    res.status(500).json({ message: 'Error registering user', error: error.message });
+  }
+};
+
+// Login user
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Find user by email
+    const user = usersStore.findByEmail(email);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    
+    // Verify password
+    const isPasswordValid = await usersStore.verifyPassword(user, password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    
+    // Generate JWT token
+    const token = generateToken(user);
+    
+    // Don't return password in response
+    const { password: _, ...userWithoutPassword } = user;
+    
+    res.status(200).json({ 
+      message: 'Login successful',
+      user: userWithoutPassword,
+      token 
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error during login', error: error.message });
   }
 };
 
 // Get user profile
-exports.getProfile = async (req, res) => {
+exports.getProfile = (req, res) => {
   try {
-    // Extract user ID from authenticated request
-    const userId = req.user.id;
-    const user = await User.findById(userId);
-    
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    res.status(200).json(user);
+    // User is already attached to req by the auth middleware
+    res.status(200).json(req.user);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching profile', error: error.message });
   }
@@ -62,14 +79,14 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      { 
-        displayName: req.body.displayName,
-        // Add other updateable fields
-      },
-      { new: true, runValidators: true }
-    );
+    const { displayName, company, jobTitle, photoURL } = req.body;
+    
+    const updatedUser = await usersStore.update(userId, {
+      displayName,
+      company,
+      jobTitle,
+      photoURL
+    });
     
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
