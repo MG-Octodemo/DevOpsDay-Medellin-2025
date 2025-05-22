@@ -1,0 +1,119 @@
+.talk-details-page {
+  padding: 2rem 0;
+}
+
+.talk-header {
+  margin-bottom: 2rem;
+}
+
+.talk-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.talk-meta {
+  color: #666;
+  text-transform: capitalize;
+}
+
+.talk-content {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 2rem;
+}
+
+.talk-info {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.speaker-info, .talk-description {
+  margin-bottom: 1.5rem;
+}
+
+.speaker-info h2, .talk-description h2 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.registration-form-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+}
+
+.registration-form-container h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.registration-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.btn-register {
+  background-color: #0070f3;
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-register:hover {
+  background-color: #0366d6;
+}
+
+.btn-register:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: red;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem 0;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .talk-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .talk-info {
+    margin-bottom: 1.5rem;
+  }
+}

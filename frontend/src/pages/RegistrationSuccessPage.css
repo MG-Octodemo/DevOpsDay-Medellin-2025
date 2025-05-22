@@ -1,0 +1,83 @@
+.success-page {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 0;
+}
+
+.success-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.success-icon {
+  background-color: #4caf50;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.success-card h1 {
+  color: #4caf50;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.registration-details {
+  text-align: left;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.registration-details h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.registration-details p {
+  margin-bottom: 0.5rem;
+}
+
+.note {
+  color: #666;
+  font-style: italic;
+  margin-bottom: 1.5rem;
+}
+
+.actions {
+  margin-top: 1.5rem;
+}
+
+.btn-back {
+  display: inline-block;
+  background-color: #0070f3;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-back:hover {
+  background-color: #0366d6;
+  text-decoration: none;
+}

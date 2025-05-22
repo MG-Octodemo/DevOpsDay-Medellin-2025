@@ -1,0 +1,44 @@
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 2rem 0;
+  margin-top: 2rem;
+}
+
+.footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.social-links {
+  display: flex;
+}
+
+.social-links a {
+  color: white;
+  margin-left: 1rem;
+}
+
+.social-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer .container {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .social-links {
+    margin-top: 1rem;
+  }
+  
+  .social-links a {
+    margin: 0 0.5rem;
+  }
+}
