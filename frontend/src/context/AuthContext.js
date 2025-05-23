@@ -23,7 +23,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const config = {
         headers: {
-          Authorization: `******        }
+          Authorization: `******'token')}`
+        }
       };
       
       const response = await axios.get('/api/users/profile', config);

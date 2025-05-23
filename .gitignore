@@ -1,0 +1,42 @@
+# Node
+node_modules/
+.env
+npm-debug.log
+yarn-error.log
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Build output
+dist/
+build/
+
+# VS Code
+.vscode/
+
+# Dependency directories
+backend/node_modules/
+frontend/node_modules/
+
+# Misc
+*.swp
+*.swo
+
+# Coverage
+coverage/
+
+# Local environment
+.env.*.local
+.env.local
+
+# React
+frontend/build/
+
+# Others
+*.tgz
+.idea/
+
