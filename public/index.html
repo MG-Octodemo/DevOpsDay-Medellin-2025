@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Day Medellín 2025 - Registro de Charlas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .auth-form {
+            display: flex;
+            gap: 1rem;
+            align-items: end;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a6fd8;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .main-content {
+            display: none;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+        }
+
+        .talk-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .talk-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .talk-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .talk-speaker {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .talk-schedule {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .talk-description {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .talk-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .user-info {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .auth-form {
+                flex-direction: column;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .talk-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DevOps Day Medellín 2025</h1>
+            <p>Sistema de Registro a Charlas</p>
+        </div>
+
+        <div id="auth-section" class="auth-section">
+            <h2>Iniciar Sesión</h2>
+            <p>Ingresa tus credenciales para acceder al sistema de registro.</p>
+            <div class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" placeholder="tu@ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" placeholder="contraseña">
+                </div>
+                <button class="btn btn-primary" onclick="login()">Iniciar Sesión</button>
+            </div>
+            <div class="alert alert-info" style="margin-top: 1rem;">
+                <strong>Usuarios de prueba:</strong><br>
+                juan@example.com / password123<br>
+                maria@example.com / password123
+            </div>
+        </div>
+
+        <div id="main-content" class="main-content">
+            <div class="user-info">
+                <strong>Usuario:</strong> <span id="user-name"></span> (<span id="user-email"></span>)
+                <button class="btn btn-secondary" onclick="logout()" style="float: right;">Cerrar Sesión</button>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('talks')">Charlas Disponibles</button>
+                <button class="tab" onclick="showTab('my-registrations')">Mis Registros</button>
+            </div>
+
+            <div class="tab-content">
+                <div id="talks-tab">
+                    <h3>Charlas Disponibles</h3>
+                    <div id="talks-list"></div>
+                </div>
+
+                <div id="my-registrations-tab" style="display: none;">
+                    <h3>Mis Charlas Registradas</h3>
+                    <div id="my-registrations-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let authHeader = null;
+        let talks = [];
+        let registrations = [];
+
+        // Show alert message
+        function showAlert(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            // Insert after header
+            const header = document.querySelector('.header');
+            header.insertAdjacentElement('afterend', alertDiv);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // API call helper
+        async function apiCall(url, options = {}) {
+            const defaultOptions = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(authHeader && { 'Authorization': authHeader })
+                }
+            };
+
+            const response = await fetch(url, { ...defaultOptions, ...options });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'API call failed');
+            }
+            
+            return response.json();
+        }
+
+        // Login function
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showAlert('Por favor ingresa email y contraseña', 'error');
+                return;
+            }
+
+            authHeader = 'Basic ' + btoa(email + ':' + password);
+
+            try {
+                const user = await apiCall('/api/me');
+                currentUser = user;
+                
+                document.getElementById('user-name').textContent = user.name;
+                document.getElementById('user-email').textContent = user.email;
+                
+                document.getElementById('auth-section').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                
+                await loadTalks();
+                await loadMyRegistrations();
+                
+                showAlert('¡Bienvenido ' + user.name + '!', 'success');
+            } catch (error) {
+                authHeader = null;
+                showAlert('Error de autenticación: ' + error.message, 'error');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            currentUser = null;
+            authHeader = null;
+            
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('main-content').style.display = 'none';
+            
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            
+            showAlert('Sesión cerrada exitosamente', 'info');
+        }
+
+        // Load talks
+        async function loadTalks() {
+            try {
+                talks = await apiCall('/api/talks');
+                renderTalks();
+            } catch (error) {
+                showAlert('Error cargando charlas: ' + error.message, 'error');
+            }
+        }
+
+        // Load user registrations
+        async function loadMyRegistrations() {
+            try {
+                registrations = await apiCall('/api/my-registrations');
+                renderMyRegistrations();
+            } catch (error) {
+                showAlert('Error cargando registros: ' + error.message, 'error');
+            }
+        }
+
+        // Render talks list
+        function renderTalks() {
+            const container = document.getElementById('talks-list');
+            const registeredTalkIds = new Set(registrations.map(r => r.id));
+            
+            if (talks.length === 0) {
+                container.innerHTML = '<p>No hay charlas disponibles.</p>';
+                return;
+            }
+
+            container.innerHTML = talks.map(talk => `
+                <div class="talk-card">
+                    <div class="talk-title">${talk.title}</div>
+                    <div class="talk-speaker">Por: ${talk.speaker}</div>
+                    <div class="talk-schedule">📅 ${formatDate(talk.schedule)}</div>
+                    <div class="talk-description">${talk.description}</div>
+                    <div class="talk-actions">
+                        ${registeredTalkIds.has(talk.id) 
+                            ? `<button class="btn btn-danger" onclick="unregisterFromTalk(${talk.id})">Cancelar Registro</button>`
+                            : `<button class="btn btn-primary" onclick="registerForTalk(${talk.id})">Registrarse</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render user registrations
+        function renderMyRegistrations() {
+            const container = document.getElementById('my-registrations-list');
+            
+            if (registrations.length === 0) {
+                container.innerHTML = '<p>No tienes registros para charlas aún.</p>';
+                return;
+            }
+
+            container.innerHTML = registrations.map(talk => `
+                <div class="talk-card">
+                    <div class="talk-title">${talk.title}</div>
+                    <div class="talk-speaker">Por: ${talk.speaker}</div>
+                    <div class="talk-schedule">📅 ${formatDate(talk.schedule)}</div>
+                    <div class="talk-description">${talk.description}</div>
+                    <div class="talk-actions">
+                        <button class="btn btn-danger" onclick="unregisterFromTalk(${talk.id})">Cancelar Registro</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Register for talk
+        async function registerForTalk(talkId) {
+            try {
+                await apiCall(`/api/talks/${talkId}/register`, { method: 'POST' });
+                await loadMyRegistrations();
+                renderTalks(); // Re-render to update button states
+                showAlert('¡Registro exitoso!', 'success');
+            } catch (error) {
+                showAlert('Error en el registro: ' + error.message, 'error');
+            }
+        }
+
+        // Unregister from talk
+        async function unregisterFromTalk(talkId) {
+            try {
+                await apiCall(`/api/talks/${talkId}/register`, { method: 'DELETE' });
+                await loadMyRegistrations();
+                renderTalks(); // Re-render to update button states
+                showAlert('Registro cancelado exitosamente', 'info');
+            } catch (error) {
+                showAlert('Error cancelando registro: ' + error.message, 'error');
+            }
+        }
+
+        // Show tab
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Show/hide tab content
+            document.getElementById('talks-tab').style.display = tabName === 'talks' ? 'block' : 'none';
+            document.getElementById('my-registrations-tab').style.display = tabName === 'my-registrations' ? 'block' : 'none';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Handle Enter key in login form
+        document.getElementById('email').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>
