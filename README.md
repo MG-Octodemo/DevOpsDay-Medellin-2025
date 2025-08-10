@@ -7,6 +7,7 @@ A web application for viewing and registering for talks at DevOpsDay Medellin 20
 - 📅 Calendar view of all conference talks
 - 👤 User authentication (sign up, sign in, password reset)
 - ✅ Register for talks and receive confirmation emails
+- 📚 **NEW: AI-powered workflow documentation generator** - See [DOCUMENTATION_GENERATOR.md](DOCUMENTATION_GENERATOR.md)
 
 ## Project Structure
 

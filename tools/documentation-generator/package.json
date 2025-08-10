@@ -1,0 +1,38 @@
+{
+  "name": "workflow-documentation-generator",
+  "version": "1.0.0",
+  "description": "Comprehensive technology-agnostic prompt generator for documenting end-to-end application workflows",
+  "main": "src/index.js",
+  "bin": {
+    "doc-gen": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "cli": "node src/cli.js",
+    "test": "jest",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "documentation",
+    "workflow",
+    "code-analysis",
+    "prompt-generator",
+    "copilot",
+    "ai-assisted"
+  ],
+  "dependencies": {
+    "commander": "^11.1.0",
+    "fs-extra": "^11.1.1",
+    "glob": "^10.3.10",
+    "inquirer": "^9.2.11",
+    "chalk": "^4.1.2",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "jest": "^29.6.2",
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
