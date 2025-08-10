@@ -1,99 +1,148 @@
 const usersStore = require('../store/users');
 const { generateToken } = require('../utils/jwtAuth');
+const { validateRegistrationData, isValidEmail, validateUserUpdateData } = require('../utils/validation');
+const {
+  createErrorResponse,
+  createValidationErrorResponse,
+  createAuthErrorResponse,
+  createNotFoundErrorResponse,
+  asyncHandler,
+  HTTP_STATUS
+} = require('../utils/errorHandler');
 
 // Register a new user
-exports.register = async (req, res) => {
-  try {
-    const { email, password, displayName } = req.body;
-    
-    // Check if user already exists
-    const existingUser = usersStore.findByEmail(email);
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with this email' });
-    }
-    
-    // Create new user
-    const newUser = await usersStore.create({
-      email,
-      password,
-      displayName: displayName || '',
-    });
-    
-    // Generate JWT token
-    const token = generateToken(newUser);
-    
-    res.status(201).json({ 
-      message: 'User registered successfully',
-      user: newUser,
-      token 
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error registering user', error: error.message });
+exports.register = asyncHandler(async (req, res) => {
+  const { email, password, displayName } = req.body;
+  
+  // Validate input data
+  const validation = validateRegistrationData({ email, password, displayName });
+  if (!validation.isValid) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json(
+      createValidationErrorResponse(validation.errors)
+    );
   }
-};
+  
+  // Check if user already exists
+  const existingUser = usersStore.findByEmail(email);
+  if (existingUser) {
+    return res.status(HTTP_STATUS.CONFLICT).json(
+      createErrorResponse('User already exists with this email', HTTP_STATUS.CONFLICT, 'USER_EXISTS')
+    );
+  }
+  
+  // Create new user
+  const newUser = await usersStore.create({
+    email: email.toLowerCase().trim(),
+    password,
+    displayName: displayName ? displayName.trim() : '',
+  });
+  
+  // Generate JWT token
+  const token = generateToken(newUser);
+  
+  res.status(HTTP_STATUS.CREATED).json({ 
+    success: true,
+    message: 'User registered successfully',
+    data: {
+      user: newUser,
+      token
+    }
+  });
+});
 
 // Login user
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    
-    // Find user by email
-    const user = usersStore.findByEmail(email);
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-    
-    // Verify password
-    const isPasswordValid = await usersStore.verifyPassword(user, password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-    
-    // Generate JWT token
-    const token = generateToken(user);
-    
-    // Don't return password in response
-    const { password: _, ...userWithoutPassword } = user;
-    
-    res.status(200).json({ 
-      message: 'Login successful',
-      user: userWithoutPassword,
-      token 
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error during login', error: error.message });
+exports.login = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+  
+  // Basic validation
+  if (!email || !password) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json(
+      createValidationErrorResponse(['Email and password are required'])
+    );
   }
-};
+  
+  if (!isValidEmail(email)) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json(
+      createValidationErrorResponse(['Invalid email format'])
+    );
+  }
+  
+  // Find user by email
+  const user = usersStore.findByEmail(email.toLowerCase().trim());
+  if (!user) {
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json(
+      createAuthErrorResponse('Invalid email or password')
+    );
+  }
+  
+  // Verify password
+  const isPasswordValid = await usersStore.verifyPassword(user, password);
+  if (!isPasswordValid) {
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json(
+      createAuthErrorResponse('Invalid email or password')
+    );
+  }
+  
+  // Generate JWT token
+  const token = generateToken(user);
+  
+  // Don't return password in response
+  const { password: _, ...userWithoutPassword } = user;
+  
+  res.status(HTTP_STATUS.OK).json({ 
+    success: true,
+    message: 'Login successful',
+    data: {
+      user: userWithoutPassword,
+      token
+    }
+  });
+});
 
 // Get user profile
-exports.getProfile = (req, res) => {
-  try {
-    // User is already attached to req by the auth middleware
-    res.status(200).json(req.user);
-  } catch (error) {
-    res.status(500).json({ message: 'Error fetching profile', error: error.message });
+exports.getProfile = asyncHandler(async (req, res) => {
+  // User is already attached to req by the auth middleware
+  if (!req.user) {
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json(
+      createAuthErrorResponse('User not authenticated')
+    );
   }
-};
+  
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    data: { user: req.user }
+  });
+});
 
 // Update user profile
-exports.updateProfile = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const { displayName, company, jobTitle, photoURL } = req.body;
-    
-    const updatedUser = await usersStore.update(userId, {
-      displayName,
-      company,
-      jobTitle,
-      photoURL
-    });
-    
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(400).json({ message: 'Error updating profile', error: error.message });
+exports.updateProfile = asyncHandler(async (req, res) => {
+  const userId = req.user?.id;
+  
+  if (!userId) {
+    return res.status(HTTP_STATUS.UNAUTHORIZED).json(
+      createAuthErrorResponse('User not authenticated')
+    );
   }
-};
+  
+  // Validate and sanitize input data
+  const validation = validateUserUpdateData(req.body);
+  if (!validation.isValid) {
+    return res.status(HTTP_STATUS.BAD_REQUEST).json(
+      createValidationErrorResponse(validation.errors)
+    );
+  }
+  
+  const updatedUser = await usersStore.update(userId, validation.sanitizedData);
+  
+  if (!updatedUser) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json(
+      createNotFoundErrorResponse('User')
+    );
+  }
+  
+  res.status(HTTP_STATUS.OK).json({
+    success: true,
+    message: 'Profile updated successfully',
+    data: { user: updatedUser }
+  });
+});
