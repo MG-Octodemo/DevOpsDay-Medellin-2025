@@ -1,0 +1,21 @@
+{
+  "name": "devopsday-medellin-2025-tests",
+  "version": "1.0.0",
+  "description": "Test automation for DevOpsDay Medellin 2025 Conference Platform",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:ui": "playwright test --ui",
+    "test:report": "playwright show-report",
+    "test:install": "playwright install"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": ["testing", "playwright", "e2e", "istqb", "iso25010", "devops"],
+  "author": "DevOpsDay Medellin 2025 Team",
+  "license": "MIT"
+}
